@@ -48,7 +48,7 @@ open class CSProgressHUD: UIView
 	var image: UIImageView?
 	var label: UILabel?
 
-	open static let shared: CSProgressHUD = CSProgressHUD()
+	public static let shared: CSProgressHUD = CSProgressHUD()
 
 	open class func dismiss()
 	{
@@ -287,7 +287,7 @@ open class CSProgressHUD: UIView
 
 		if self.spinner == nil
 		{
-			self.spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+			self.spinner = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.whiteLarge)
 			self.spinner?.color = CSProgressHUDConstants.HUD_SPINNER_COLOR
 			self.spinner?.hidesWhenStopped = true
 		}
@@ -380,7 +380,7 @@ open class CSProgressHUD: UIView
 
 		if self.label?.text != nil
 		{
-			let attributes: [NSAttributedStringKey: Any] = [NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue): self.label?.font as Any]
+			let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key(rawValue: NSAttributedString.Key.font.rawValue): self.label?.font as Any]
 			let options: NSStringDrawingOptions = [NSStringDrawingOptions.usesFontLeading, NSStringDrawingOptions.truncatesLastVisibleLine, NSStringDrawingOptions.usesLineFragmentOrigin]
 			labelRect = ((self.label?.text)! as NSString).boundingRect(with: CGSize(width: 200.0, height: 300.0), options: options, attributes: attributes, context: nil)
 
@@ -416,9 +416,9 @@ open class CSProgressHUD: UIView
 		if notification != nil
 		{
 			let info: NSDictionary = (notification?.userInfo)! as NSDictionary
-			let keyboard: CGRect = info.value(forKey: UIKeyboardFrameEndUserInfoKey) as! CGRect
-			duration = info.value(forKey: UIKeyboardAnimationDurationUserInfoKey) as! TimeInterval
-			if (notification?.name == NSNotification.Name.UIKeyboardWillShow || notification?.name == NSNotification.Name.UIKeyboardDidShow)
+			let keyboard: CGRect = info.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! CGRect
+			duration = info.value(forKey: UIResponder.keyboardAnimationDurationUserInfoKey) as! TimeInterval
+			if (notification?.name == UIResponder.keyboardWillShowNotification || notification?.name == UIResponder.keyboardDidShowNotification)
 			{
 				heightKeyboard = keyboard.size.height
 			}
@@ -431,7 +431,7 @@ open class CSProgressHUD: UIView
 		let screen: CGRect = UIScreen.main.bounds
 		let center: CGPoint = CGPoint(x: screen.size.width / 2.0, y: (screen.size.height - heightKeyboard) / 2.0)
 
-		UIView.animate(withDuration: duration, delay: 0.0, options: UIViewAnimationOptions.allowUserInteraction,
+		UIView.animate(withDuration: duration, delay: 0.0, options: UIView.AnimationOptions.allowUserInteraction,
 			animations:
 			{
 				self.hud?.center = CGPoint(x: center.x, y: center.y)
@@ -482,7 +482,7 @@ open class CSProgressHUD: UIView
 			self.alpha = 1.0
 			self.hud?.alpha = 0.0
 			self.hud?.transform = (self.hud?.transform.scaledBy(x: 1.4, y: 1.4))!
-			let options: UIViewAnimationOptions = [UIViewAnimationOptions.allowUserInteraction, UIViewAnimationOptions.curveEaseOut]
+			let options: UIView.AnimationOptions = [UIView.AnimationOptions.allowUserInteraction, UIView.AnimationOptions.curveEaseOut]
 			UIView.animate(withDuration: 0.15, delay: 0.0, options: options,
 				animations:
 				{
@@ -497,7 +497,7 @@ open class CSProgressHUD: UIView
 	{
 		if self.alpha == 1.0
 		{
-			let options: UIViewAnimationOptions = [UIViewAnimationOptions.allowUserInteraction, UIViewAnimationOptions.curveEaseIn]
+			let options: UIView.AnimationOptions = [UIView.AnimationOptions.allowUserInteraction, UIView.AnimationOptions.curveEaseIn]
 			UIView.animate(withDuration: 0.15, delay: 0.0, options: options,
 				animations:
 				{
@@ -517,7 +517,7 @@ open class CSProgressHUD: UIView
 
 	func timedHide()
 	{
-		let textLength: Int = ((self.label?.text != nil) && ((self.label?.text?.characters.count)! > 15)) ? (self.label?.text?.characters.count)! : 15
+		let textLength: Int = ((self.label?.text != nil) && ((self.label?.text?.count)! > 15)) ? (self.label?.text?.count)! : 15
 		let delay: TimeInterval = Double(textLength) * 0.08 + 0.5
 		let deadline: DispatchTime = DispatchTime.now() + DispatchTimeInterval.seconds(Int(delay))
 		DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async

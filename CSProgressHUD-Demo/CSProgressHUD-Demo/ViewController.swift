@@ -63,7 +63,7 @@ class ViewController: UITableViewController
 		var cell: UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: "cell")
 		if cell == nil
 		{
-			cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cell")
+			cell = UITableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: "cell")
 		}
 		cell?.textLabel?.text = text
 		return cell!
